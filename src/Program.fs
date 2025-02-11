@@ -4,9 +4,7 @@ open Avalonia
 open Avalonia.Controls.ApplicationLifetimes
 open Avalonia.Themes.Fluent
 open Avalonia.FuncUI.Hosts
-open Avalonia.Controls
 open Avalonia.FuncUI
-open Avalonia.FuncUI.DSL
 
 module Main =
 
@@ -17,15 +15,16 @@ module Main =
 type MainWindow() =
     inherit HostWindow()
     do
-        base.Title <- "Counter Example"
+        base.Title <- "Snowshovel"
         base.Content <- Main.view ()
 
 type App() =
     inherit Application()
 
-    override this.Initialize() =
+    override this.Initialize() = 
         this.Styles.Add (FluentTheme())
-        this.RequestedThemeVariant <- Styling.ThemeVariant.Dark
+        this.RequestedThemeVariant <- Styling.ThemeVariant.Light
+        ()
 
     override this.OnFrameworkInitializationCompleted() =
         match this.ApplicationLifetime with
