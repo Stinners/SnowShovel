@@ -6,6 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="src/LoginTypes.fs" />
+    <Compile Include="src/DataStore.fs" />
     <Compile Include="src/LoginController.fs" />
     <Compile Include="src/LoginView.fs" />
     <Compile Include="src/Program.fs" />
@@ -15,6 +17,7 @@
     <PackageReference Include="Avalonia.Desktop" Version="11.0.0" />
     <PackageReference Include="Avalonia.FuncUI" Version="1.0.0" />
     <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Snowflake.Data" Version="4.3.0" />
   </ItemGroup>
 

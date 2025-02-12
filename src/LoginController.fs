@@ -3,26 +3,14 @@ namespace CounterApp
 open System.Text
 open Snowflake.Data.Client
 
+open LoginTypes
+
 module LoginController = 
     let add (field: string) (value: string) (builder: StringBuilder) = 
         if value <> "" then 
             builder.Append($"{field}={value};") |> ignore
         builder
 
-    type public AuthMethod = ExternalBrowser
-                           | KeyPair of keyFilePath : string
-                           | Password of password : string
-
-    type public LoginDetails =
-        { username: string
-          account: string
-          database: string
-          role: string
-          schema: string
-          warehouse: string
-          proxy: string
-          auth: AuthMethod
-        }
 
     let public Connect (details: LoginDetails): SnowflakeDbConnection = 
 
@@ -44,8 +32,6 @@ module LoginController =
         connection 
 
 module LoginValidation = 
-    open LoginController
-
     let validate (input: string) (validator: string -> bool) (message: string) (errors: string list)  = 
         if not (validator input) then message :: errors else errors
 

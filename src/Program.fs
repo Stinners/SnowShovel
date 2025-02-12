@@ -7,6 +7,8 @@ open Avalonia.Themes.Fluent
 open Avalonia.FuncUI.Hosts
 open Avalonia.FuncUI
 
+open DataStore
+
 module Main =
 
     let view () = Component(fun ctx ->
@@ -37,6 +39,7 @@ module Program =
 
     [<EntryPoint>]
     let main(args: string[]) =
+        initDataStore () |> ignore
         AppBuilder
             .Configure<App>()
             .UsePlatformDetect()

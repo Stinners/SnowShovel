@@ -11,6 +11,8 @@ open Avalonia.Media
 
 open LoginController
 open LoginValidation
+open LoginTypes
+open DataStore
 
 module Login =
 
@@ -18,16 +20,6 @@ module Login =
 
     let AuthMethodStrings = ["Browser"; "Key Pair"; "Password"]
 
-    let initState =
-        { username = ""
-          account = ""
-          database = ""
-          role = ""
-          schema = ""
-          warehouse = ""
-          proxy = ""
-          auth = ExternalBrowser
-        }
 
     let loginButtonState isValid = 
         if isValid then [ 
@@ -38,11 +30,14 @@ module Login =
             Button.isEnabled false
         ]
 
-
     let view () = Component.create("LoginView", fun ctx ->
-        let loginDetails = ctx.useState initState
+        let loginStore: IDataStore<LoginDetails> = LoginStore()
+        let initalLoginDetails = loginStore.load "defaultLogin" |> Option.defaultValue emptyLoginDetails
+
+        let loginDetails = ctx.useState initalLoginDetails
         let selectedAuth = ctx.useState AuthMethodStrings[0]
         let validDetails = ctx.useState false
+
 
         let createTextBox 
             (title: string)
@@ -159,7 +154,11 @@ module Login =
                 [
                     Button.create ([
                         Button.content "Login"
-                        Button.onClick(fun _ -> Connect loginDetails.Current |> ignore)
+                        Button.onClick(fun _ ->
+                            let login = loginDetails.Current
+                            Connect loginDetails.Current |> ignore
+                            loginStore.write "defaultLogin" login
+                        )
                     ]
                     @ 
                     loginButtonState (validDetails.Current)
