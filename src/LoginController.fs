@@ -1,4 +1,4 @@
-namespace CounterApp 
+namespace SnowShovel 
 
 open System.Text
 open Snowflake.Data.Client

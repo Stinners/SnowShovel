@@ -1,4 +1,4 @@
-﻿namespace CounterApp
+﻿namespace SnowShovel
 
 open System
 open Avalonia
@@ -7,12 +7,20 @@ open Avalonia.Themes.Fluent
 open Avalonia.FuncUI.Hosts
 open Avalonia.FuncUI
 
+open Snowflake.Data.Client
+
 open DataStore
 
 module Main =
 
     let view () = Component(fun ctx ->
-        Login.view ()
+        let conn: IWritable<SnowflakeDbConnection option> = ctx.useState Option.None
+
+        let setConnection newConn = conn.Set(Some(newConn))
+
+        match conn.Current with 
+        | None -> Login.view setConnection
+        | Some(conn) -> LoaderView.view conn
     )
 
 type MainWindow() =

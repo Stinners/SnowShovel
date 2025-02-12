@@ -1,4 +1,4 @@
-namespace CounterApp 
+namespace SnowShovel 
 
 module LoginTypes  = 
 

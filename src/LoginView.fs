@@ -1,4 +1,4 @@
-namespace CounterApp
+namespace SnowShovel
 
 open System
 open Avalonia
@@ -14,11 +14,16 @@ open LoginValidation
 open LoginTypes
 open DataStore
 
+open Snowflake.Data.Client
+
 module Login =
+
+    type ConnSetter = SnowflakeDbConnection -> unit
 
     let trim (str: String) = str.Trim()
 
     let AuthMethodStrings = ["Browser"; "Key Pair"; "Password"]
+    let defaultLoginName = "defaultLogin"
 
 
     let loginButtonState isValid = 
@@ -30,9 +35,9 @@ module Login =
             Button.isEnabled false
         ]
 
-    let view () = Component.create("LoginView", fun ctx ->
+    let view (setConn: ConnSetter) = Component.create("LoginView", fun ctx ->
         let loginStore: IDataStore<LoginDetails> = LoginStore()
-        let initalLoginDetails = loginStore.load "defaultLogin" |> Option.defaultValue emptyLoginDetails
+        let initalLoginDetails = loginStore.load defaultLoginName |> Option.defaultValue emptyLoginDetails
 
         let loginDetails = ctx.useState initalLoginDetails
         let selectedAuth = ctx.useState AuthMethodStrings[0]
@@ -156,8 +161,9 @@ module Login =
                         Button.content "Login"
                         Button.onClick(fun _ ->
                             let login = loginDetails.Current
-                            Connect loginDetails.Current |> ignore
-                            loginStore.write "defaultLogin" login
+                            let connection = Connect loginDetails.Current
+                            loginStore.write defaultLoginName login
+                            setConn connection
                         )
                     ]
                     @ 

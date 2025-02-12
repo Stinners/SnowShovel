@@ -1,4 +1,4 @@
-namespace CounterApp 
+namespace SnowShovel 
 
 // TODO This should probably be abstracted at some point in the
 // future but for now we'll write a couple of concrete 

@@ -10,6 +10,7 @@
     <Compile Include="src/DataStore.fs" />
     <Compile Include="src/LoginController.fs" />
     <Compile Include="src/LoginView.fs" />
+    <Compile Include="src/LoaderView.fs" />
     <Compile Include="src/Program.fs" />
   </ItemGroup>
 
