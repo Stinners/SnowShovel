@@ -1,5 +1,6 @@
 namespace CounterApp
 
+open System
 open Avalonia
 open Avalonia.Controls
 open Avalonia.FuncUI
@@ -8,40 +9,40 @@ open Avalonia.FuncUI.Types
 open Avalonia.Layout
 open Avalonia.Media
 
+open LoginController
+open LoginValidation
+
 module Login =
+
+    let trim (str: String) = str.Trim()
 
     let AuthMethodStrings = ["Browser"; "Key Pair"; "Password"]
 
-    type AuthMethod = ExternalBrowser
-                    | KeyPair of keyFilePath : string
-                    | Password of password : string
-
-    type LoginDetails =
-        { username: string
-          server: string
-          database: string
-          role: string
-          schema: string
-          warehouse: string
-          proxy: string option
-          auth: AuthMethod
-        }
-
     let initState =
         { username = ""
-          server = ""
+          account = ""
           database = ""
           role = ""
           schema = ""
           warehouse = ""
-          proxy = Option.None
+          proxy = ""
           auth = ExternalBrowser
         }
+
+    let loginButtonState isValid = 
+        if isValid then [ 
+            Button.background "green"
+            Button.foreground "white"
+        ]
+        else [
+            Button.isEnabled false
+        ]
 
 
     let view () = Component.create("LoginView", fun ctx ->
         let loginDetails = ctx.useState initState
         let selectedAuth = ctx.useState AuthMethodStrings[0]
+        let validDetails = ctx.useState false
 
         let createTextBox 
             (title: string)
@@ -58,7 +59,11 @@ module Login =
                 TextBox.create [
                     TextBox.watermark fillerText
                     TextBox.text contents
-                    TextBox.onTextChanged updateFunc
+                    TextBox.onTextChanged (fun contents -> 
+                        updateFunc (trim contents)
+                        let isValid = ValidateDetails loginDetails.Current = []
+                        validDetails.Set(isValid)
+                    )
                 ]
             ]
 
@@ -120,10 +125,10 @@ module Login =
                     (fun contents -> loginDetails.Set({loginDetails.Current with username = contents}))) 
                 @
                 (createTextBox 
-                    "Server" 
-                    "Server name" 
-                    loginDetails.Current.server
-                    (fun contents -> loginDetails.Set({loginDetails.Current with server = contents})))
+                    "Account" 
+                    "Account name" 
+                    loginDetails.Current.account
+                    (fun contents -> loginDetails.Set({loginDetails.Current with account = contents})))
                 @
                 (createTextBox 
                     "Role" 
@@ -150,7 +155,16 @@ module Login =
                     (fun contents -> loginDetails.Set({loginDetails.Current with warehouse = contents})))
                 @ 
                 authView ()
-
+                @ 
+                [
+                    Button.create ([
+                        Button.content "Login"
+                        Button.onClick(fun _ -> Connect loginDetails.Current |> ignore)
+                    ]
+                    @ 
+                    loginButtonState (validDetails.Current)
+                    )
+                ]
             )
         ]
     )

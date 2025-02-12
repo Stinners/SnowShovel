@@ -1,5 +1,6 @@
 ﻿namespace CounterApp
 
+open System
 open Avalonia
 open Avalonia.Controls.ApplicationLifetimes
 open Avalonia.Themes.Fluent
