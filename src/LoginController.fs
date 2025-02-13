@@ -4,12 +4,19 @@ open System.Text
 open Snowflake.Data.Client
 
 open LoginTypes
+open Utils
+open Validators
 
 module LoginController = 
-    let add (field: string) (value: string) (builder: StringBuilder) = 
-        if value <> "" then 
-            builder.Append($"{field}={value};") |> ignore
-        builder
+
+    // Other validations to add:
+    // Username is an email 
+    // Account contains a '-'
+    let public ValidateDetails (details: LoginDetails): string list = 
+        [] 
+        |> validateStr details.username notEmpty "Username is empty" 
+        |> validateStr details.username isEmail "Username is not an email"
+        |> validateStr details.account  notEmpty "Account is Empty"
 
 
     let public Connect (details: LoginDetails): SnowflakeDbConnection = 
@@ -30,18 +37,3 @@ module LoginController =
         printfn "Connection Successful"
 
         connection 
-
-module LoginValidation = 
-    let validate (input: string) (validator: string -> bool) (message: string) (errors: string list)  = 
-        if not (validator input) then message :: errors else errors
-
-    let notEmpty str = str <> ""
-
-    // Other validations to add:
-    // Username is an email 
-    // Account contains a '-'
-
-    let public ValidateDetails (details: LoginDetails): string list = 
-        [] 
-        |> validate details.username notEmpty "Username is empty" 
-        |> validate details.account  notEmpty "Account is Empty"

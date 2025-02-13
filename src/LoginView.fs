@@ -10,7 +10,6 @@ open Avalonia.Layout
 open Avalonia.Media
 
 open LoginController
-open LoginValidation
 open LoginTypes
 open DataStore
 
@@ -19,8 +18,6 @@ open Snowflake.Data.Client
 module Login =
 
     type ConnSetter = SnowflakeDbConnection -> unit
-
-    let trim (str: String) = str.Trim()
 
     let AuthMethodStrings = ["Browser"; "Key Pair"; "Password"]
     let defaultLoginName = "defaultLogin"
@@ -60,7 +57,7 @@ module Login =
                     TextBox.watermark fillerText
                     TextBox.text contents
                     TextBox.onTextChanged (fun contents -> 
-                        updateFunc (trim contents)
+                        updateFunc (Utils.trim contents)
                         let isValid = ValidateDetails loginDetails.Current = []
                         validDetails.Set(isValid)
                     )
