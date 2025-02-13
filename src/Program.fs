@@ -48,6 +48,12 @@ module Program =
     [<EntryPoint>]
     let main(args: string[]) =
         initDataStore () |> ignore
+
+        if Utils.isWDL then 
+            printfn "Running under WSL"
+            printfn "Some functionality will be limited"
+            printfn "You may needs to set LIBGL_ALWAYS_SOFTWARE=1"
+
         AppBuilder
             .Configure<App>()
             .UsePlatformDetect()

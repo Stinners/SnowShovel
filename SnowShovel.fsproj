@@ -6,6 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="src/Utils.fs" />
+    <Compile Include="src/FilePicker.fs" />
     <Compile Include="src/LoginTypes.fs" />
     <Compile Include="src/DataStore.fs" />
     <Compile Include="src/LoginController.fs" />
