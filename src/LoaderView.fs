@@ -1,7 +1,6 @@
 namespace SnowShovel
 
 open System
-open Avalonia
 open Avalonia.Controls
 open Avalonia.FuncUI
 open Avalonia.FuncUI.DSL
@@ -10,29 +9,31 @@ open Avalonia.Platform.Storage
 open Snowflake.Data.Client
 
 module LoaderView = 
-    let view (conn: SnowflakeDbConnection) = Component.create("LoaderView", fun ctx ->
 
-        let topLevel = TopLevel.GetTopLevel ctx.control
+    let dialogContents () = Component(fun _ -> 
+        StackPanel.create [
+            StackPanel.children [ 
+                TextBlock.create [
+                    TextBlock.text "Model"
+                ]
+                TextBlock.create [
+                    TextBlock.text "View"
+                ]
+            ]
+        ] )
 
-        let useFiles () =
-            async {
-              let options = FilePickerOpenOptions(
-                  Title = "Open Text File",
-                  AllowMultiple = false
-              ) 
-                 
-              Console.WriteLine("Opening File Picker")
-              let! result = topLevel.StorageProvider.OpenFilePickerAsync(options) |> Async.AwaitTask
-              Console.WriteLine("Done with File Picker")
-              result |> ignore
-            } 
+    let view () = Component.create("LoaderView", fun ctx ->
 
-        useFiles () |> Async.StartImmediate
 
-                    
-        TextBlock.create [
-            TextBlock.dock Dock.Top
-            TextBlock.text "Connected!"
-            TextBox.margin (Thickness(0, 10, 0, 0))
+        let dialog = Window()
+        dialog.Height <- 300
+        dialog.Width <- 200
+        dialog.Content <- dialogContents ()
+
+        dialog.Show () 
+
+
+        Button.create [
+            Button.content "Select File"
         ]
     )

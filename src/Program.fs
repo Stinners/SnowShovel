@@ -19,8 +19,8 @@ module Main =
         let setConnection newConn = conn.Set(Some(newConn))
 
         match conn.Current with 
-        | None -> Login.view setConnection
-        | Some(conn) -> LoaderView.view conn
+        //| None -> Login.view setConnection
+        | None | Some(_) -> LoaderView.view ()
     )
 
 type MainWindow() =
