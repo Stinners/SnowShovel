@@ -1,6 +1,7 @@
 namespace SnowShovel 
 
 open System 
+open System.Linq;
 open FSharp.Collections
 open System.Text.RegularExpressions
 
@@ -59,3 +60,14 @@ module UploadSet =
         match source.LoadChunk() with 
         | Some chunk -> chunk
         | None -> failwith $"Failed to load data from source: {source.Name()}"
+
+    let updateChunk (oldChunk:Chunk) (newChunk:Chunk) = 
+        let oldKeys = oldChunk.Keys
+        let newKeys = oldChunk.Keys
+
+        if Set(oldKeys) <> Set(newKeys) then 
+            failwith "New Chunk has different column set to old chunk"
+
+        for key in newKeys do 
+            oldChunk[key] <- { oldChunk[key] with data = newChunk[key].data }
+
