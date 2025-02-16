@@ -7,12 +7,20 @@
 
   <ItemGroup>
     <Compile Include="src/Utils.fs" />
+
+    <!-- Logic Modules -->
+    <Compile Include="src/UploadSet.fs" />
+    <!-- End Logic Modules -->
+
+    <!-- GUI Modules -->
     <Compile Include="src/FilePicker.fs" />
     <Compile Include="src/LoginTypes.fs" />
     <Compile Include="src/DataStore.fs" />
     <Compile Include="src/LoginController.fs" />
     <Compile Include="src/LoginView.fs" />
     <Compile Include="src/LoaderView.fs" />
+    <!-- End GUI Modules -->
+
     <Compile Include="src/Program.fs" />
   </ItemGroup>
 
