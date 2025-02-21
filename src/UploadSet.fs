@@ -1,7 +1,6 @@
 namespace SnowShovel 
 
 open System 
-open System.Linq;
 open FSharp.Collections
 open System.Text.RegularExpressions
 
@@ -38,17 +37,20 @@ module UploadSet =
 
 
     // A Chunk represents a subset of rows from a data source 
-    // as a bare bones-data frame object.
-    // For the moment all data is stored as strings, before undergoing 
-    // validation
-    // Column contains both the data and the metadata about a single column 
-    type Column = 
-        { data:      string array
-          candidates: Set<SnowflakeType>
-          nullable:  bool
-        }
+    // This is just a very primitive dataframe 
+    // All data is stored as strings for now - before validation
+    type Chunk = Collections.Generic.Dictionary<string, string array>
 
-    type Chunk = Collections.Generic.Dictionary<string, Column>
+    type DataSource = Chunk seq 
+
+    // Represents what we know about a single column 
+    type ColumnSchema = 
+        { candiates: Set<SnowflakeType> 
+          nullable: bool }
+
+    // Represents What we know about the whole dataset 
+    type TableKnowledge = Collections.Generic.Dictionary<string, ColumnSchema>
+          
 
 
     type IDataSource =
