@@ -1,5 +1,6 @@
 bin/
 obj/
 script.bash
+test_files/
 
 .data
