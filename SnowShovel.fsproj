@@ -20,6 +20,7 @@
     <Compile Include="src/LoginController.fs" />
     <Compile Include="src/LoginView.fs" />
     <Compile Include="src/LoaderView.fs" />
+    <Compile Include="src/DataView.fs" />
     <!-- End GUI Modules -->
 
     <Compile Include="src/Program.fs" />

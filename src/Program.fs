@@ -10,6 +10,8 @@ open Avalonia.FuncUI
 open Snowflake.Data.Client
 
 open DataStore
+open UploadSet
+open CsvSource
 
 module Main =
 
@@ -48,6 +50,8 @@ module Program =
     [<EntryPoint>]
     let main(args: string[]) =
         initDataStore () |> ignore
+        let csvFile: IDataSource = CsvSource("test_files/int_lab_subgroup_mappings.csv")
+        csvFile.load() |> printfn "Result: %A"
 
         if Utils.isWDL then 
             printfn "Running under WSL"

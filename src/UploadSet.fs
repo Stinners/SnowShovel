@@ -3,6 +3,7 @@ namespace SnowShovel
 open System 
 open FSharp.Collections
 open System.Text.RegularExpressions
+open System.Collections
 
 
 module UploadSet = 
@@ -39,7 +40,7 @@ module UploadSet =
     // A Chunk represents a subset of rows from a data source 
     // This is just a very primitive dataframe 
     // All data is stored as strings for now - before validation
-    type Chunk = Collections.Generic.Dictionary<string, string array>
+    type Chunk = Collections.Generic.Dictionary<string, Generic.List<string>>
 
     type DataSource = Chunk seq 
 
@@ -52,24 +53,8 @@ module UploadSet =
     type TableKnowledge = Collections.Generic.Dictionary<string, ColumnSchema>
           
 
-
     type IDataSource =
-        abstract member LoadChunk: unit -> Chunk option 
-        abstract member Name: unit -> string
-
-    // TODO figure out how to handle errors in this part of the code
-    let initChunk (source:IDataSource) = 
-        match source.LoadChunk() with 
-        | Some chunk -> chunk
-        | None -> failwith $"Failed to load data from source: {source.Name()}"
-
-    let updateChunk (oldChunk:Chunk) (newChunk:Chunk) = 
-        let oldKeys = oldChunk.Keys
-        let newKeys = oldChunk.Keys
-
-        if Set(oldKeys) <> Set(newKeys) then 
-            failwith "New Chunk has different column set to old chunk"
-
-        for key in newKeys do 
-            oldChunk[key] <- { oldChunk[key] with data = newChunk[key].data }
+        abstract member load: unit -> Result<Chunk option seq, string>
+        abstract member name: unit -> string
+        abstract member sourceType: unit -> string
 
